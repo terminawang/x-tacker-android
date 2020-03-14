@@ -1,0 +1,122 @@
+apply plugin: 'com.android.library'
+apply plugin: 'android-aspectjx'
+apply plugin: 'maven'
+apply plugin: 'com.google.protobuf'
+
+def version_name = '1.0.2'
+def version_code = 2
+
+android {
+    compileSdkVersion 27
+
+
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode version_code
+        versionName version_name
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+//            libraryVariants.all { variant ->
+//                appendVersionName(variant, defaultConfig)
+//            }
+
+        }
+    }
+
+    compileOptions {
+        encoding = 'UTF-8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+            }
+            proto {
+                srcDir 'src/main/proto'
+            }
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    //依赖Gson
+    implementation 'com.google.code.gson:gson:2.8.5'
+    //依赖网网络框架
+//    implementation project(':httplibrary')
+
+    //AspectJ
+//    implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.2'
+    //protobuf协议上传
+    implementation 'com.google.protobuf:protobuf-java:3.9.1'
+    implementation 'com.google.protobuf:protoc:3.9.1'
+
+
+}
+
+
+
+uploadArchives{
+    configuration = configurations.archives
+    repositories{
+        mavenDeployer{
+            snapshotRepository(url: 'http://maven.geexfinance.com:8081/maven/repository/3rd_party/') {
+                authentication(userName: 'admin', password: 'geex2016')
+            }
+            repository(url: 'http://maven.geexfinance.com:8081/maven/repository/3rd_party/'){
+                authentication(userName: 'admin', password: 'geex2016')
+            }
+            pom.project {
+                version version_name
+                artifactId 'statistics'
+                groupId 'com.geex'
+                packaging 'aar'
+                description 'android statistics'
+            }
+        }
+    }
+}
+
+//protobuf配置
+
+protobuf {
+    //配置protoc编译器
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.9.1'
+    }
+    //这里配置生成目录，编译后会在build的目录下生成对应的java文件
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.builtins {
+                java {}
+            }
+        }
+    }
+}
+
+
+
+

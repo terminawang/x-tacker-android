@@ -1,0 +1,8 @@
+syntax = "proto3";
+//包名
+package com.finance.geex.statisticslibrary;
+//生成的文件名
+option java_outer_classname = "GeexDataTracker";
+message DataTracker {
+    bytes body = 1; //ByteString 字段
+}

@@ -1,0 +1,41 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.2.50'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+//        项目引入AspectJ  1.9.2
+//        classpath group: 'org.aspectj', name: 'aspectjtools', version: '1.9.2'
+//        classpath group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.2'
+
+        //AspectJ
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.4'
+
+        //butterknife
+        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-rc2'
+
+        //proto
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.5'
+
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
